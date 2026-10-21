@@ -237,3 +237,13 @@ for conflict in (False, True):
                     else:
                         desc.validate(disable_checks=disable_checks)
                         assert len(desc.keys) == 1
+
+# Distinct suffixes must not hide a conflicting aggregate chain code.
+desc = Descriptor.from_string("tr(musig(%s,%s)/<0;1>/*,pk(%s/<2;3>/*))" %
+                              (mine, b, bad_xpub))
+try:
+    desc.validate()
+except AssertionError as exc:
+    assert str(exc) == "Conflicting signer key", str(exc)
+else:
+    assert False, "conflicting aggregate xpub passed import validation"

@@ -488,6 +488,11 @@ def test_key_identity(sim_execfile, use_testnet):
     res = sim_execfile('devtest/unit_key_identity.py')
     assert res == ""
 
+def test_policy_origin_alias(sim_execfile, use_testnet):
+    use_testnet()
+    res = sim_execfile('devtest/unit_policy_origin_alias.py')
+    assert res == ""
+
 def test_xfp_paths(sim_execfile, use_testnet):
     use_testnet()
     res = sim_execfile('devtest/unit_xfp_paths.py')
