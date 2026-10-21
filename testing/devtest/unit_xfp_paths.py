@@ -65,3 +65,13 @@ for text, expected in cases:
         wallet = MiniScriptWallet.from_descriptor_obj('xfp-paths', desc)
         assert wallet.matching_subpaths(expected), variant
         assert not wallet.matching_subpaths(expected + [ap]), variant
+
+# An ordinary internal key must not hide explicit leaf MuSig participants.
+desc = Descriptor.from_string('tr(%s,pk(%s))' % (x+s, m+s))
+desc.validate()
+wallet = MiniScriptWallet.from_descriptor_obj('xfp-paths', desc)
+assert ap in wallet.xfp_paths() and bp in wallet.xfp_paths()
+assert ExtendedKey.from_string(a).node.pubkey() in [
+    k.node.pubkey() for k in wallet.xpubs_from_xfp(ap[0])]
+assert ExtendedKey.from_string(b).node.pubkey() in [
+    k.node.pubkey() for k in wallet.xpubs_from_xfp(bp[0])]
